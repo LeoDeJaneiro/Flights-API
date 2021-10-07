@@ -3,8 +3,8 @@ const requestWithTimeout = require("./requestWithTimeout");
 /**
  * Consolidates all fulfilled/resolved Promises which are returned by requestWithTimeout()
  * (no error handling for rejected Promises necessary)
- * @param {endpointConfig[]} endpoints - endpointConfigurations which are expected by Axios
- * @returns {fulfilledResponse[]}
+ * @param {Object[]} endpoints - List of endpointConfigurations which are expected by Axios
+ * @returns {Object[]} - fulfilled response data
  */
 const requestMultiple = async (endpoints) => {
   const results = await Promise.allSettled(
