@@ -1,6 +1,6 @@
 # Flights API
 
-This RESTful API responses within less than 1 sec with a list of unique flights which have been fetched from two endpoints.
+This RESTful API responds within less than 1 sec with a list of unique flights which have been fetched from two endpoints.
 The custom header _X-flight_sources_ adds metadata on which sources have responded.
 
 **`GET /flights`**
