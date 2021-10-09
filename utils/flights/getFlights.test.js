@@ -45,6 +45,7 @@ describe("getFlights", () => {
         )
       ).toBeTruthy();
     });
+
     it("should find inequality", () => {
       expect(
         comparator(
@@ -75,6 +76,7 @@ describe("getFlights", () => {
         )
       ).toBeFalsy();
     });
+
     it("should return false on undefined values", () => {
       expect(
         comparator(
@@ -105,7 +107,9 @@ describe("getFlights", () => {
 
   describe("consolidateFlights", () => {
     it("should merge and remove duplicates", () => {
-      expect(consolidateFlights(source1, source2)).toEqual(result);
+      expect(
+        consolidateFlights(source1.value.flights, source2.value.flights)
+      ).toEqual(result);
     });
   });
 
@@ -113,17 +117,22 @@ describe("getFlights", () => {
     it("should consolidate", async () => {
       requestMultiple.mockImplementation(() => [source1, source2]);
       const flights = await requestFlights();
-      expect(flights).toEqual(result);
+      expect(flights).toEqual({ flights: result, sources: ["id1", "id2"] });
     });
+
     it("should unpack", async () => {
       requestMultiple.mockImplementation(() => [source1]);
       const flights = await requestFlights();
-      expect(flights).toEqual(source1.flights);
+      expect(flights).toEqual({
+        flights: source1.value.flights,
+        sources: ["id1"],
+      });
     });
+
     it("should return empty list", async () => {
       requestMultiple.mockImplementation(() => []);
       const flights = await requestFlights();
-      expect(flights).toEqual([]);
+      expect(flights).toEqual({ flights: [], sources: [] });
     });
   });
 });

@@ -12,21 +12,28 @@ jest.mock("../utils/flights/getFlights", () => ({
 }));
 
 describe("GET /flights", () => {
+  const response = [{ id: 1 }, { id: 2 }, { id: 3 }];
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should return result", async () => {
-    const response = [{ id: 1 }, { id: 2 }, { id: 3 }];
-    requestFlights.mockImplementation(jest.fn(() => response));
-    const { body, status } = await request(router).get("/flights");
+  it("should respond with payload and header", async () => {
+    requestFlights.mockImplementation(
+      jest.fn(() => ({
+        flights: response,
+        sources: ["source1", "source2"],
+      }))
+    );
+    const { body, status, headers } = await request(router).get("/flights");
     expect(body).toEqual(response);
+    // key "x-flight_sources" matches X-flight_sources
+    expect(headers["x-flight_sources"]).toEqual("source1,source2");
     expect(status).toEqual(200);
   });
+
   it("should return server error", async () => {
-    const response = [{ id: 1 }, { id: 2 }, { id: 3 }];
     requestFlights.mockRejectedValue(new Error("error"));
-    const { body, status } = await request(router).get("/flights");
+    const { status } = await request(router).get("/flights");
     expect(status).toEqual(500);
   });
 });

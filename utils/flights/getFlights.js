@@ -11,7 +11,7 @@ const identityPaths = [
 ];
 
 /**
- * Returns true if all values in the identityPaths from both params are equal.
+ * Returns true if all values in the identityPaths from both parameters are equal.
  * @param {Object} flight1 - flight
  * @param {Object} flight2 - flight
  * @returns {boolean}
@@ -22,35 +22,42 @@ const comparator = (flight1, flight2) =>
   );
 
 /**
- * Merges two flightSearchResponses and removes flight duplicates.
- * @param {Object} source1 - flightSearchResponse
- * @param {Object} source2 - flightSearchResponse
+ * Merges two flights and removes duplicates.
+ * @param {Object} flight1 - flight
+ * @param {Object} flight2 - flight
  * @returns {Object[]} - list of flights
  */
-const consolidateFlights = (source1, source2) => {
-  const flightList = _.get(source1, "flights", []);
-
-  return _.chain(source2)
-    .get("flights", [])
-    .unionWith(flightList, comparator)
-    .value();
-};
+const consolidateFlights = (flight1, flight2) =>
+  _.unionWith(flight1, flight2, comparator);
 
 /**
- * Requests flightSearchResponses from both endpoints and consolidates flights.
+ * Requests flightSearchResponses from the endpoints and consolidates flights for one or two sources.
  * (assuming that flight duplicates only arise from a merge)
- * @returns {Object[]} - list of flights
+ * @returns {Promise<Object>} - list of flights and list of flight sources
  */
 const requestFlights = async () => {
   const flightsRaw = await requestMultiple(endpoints);
+  const sources = flightsRaw.map(({ source }) => source);
+  const flights = flightsRaw.map((flightRaw) =>
+    _.get(flightRaw, ["value", "flights"], [])
+  );
 
   if (flightsRaw.length === 2) {
-    return consolidateFlights(...flightsRaw);
+    return {
+      flights: consolidateFlights(...flights),
+      sources,
+    };
   }
   if (flightsRaw.length === 1) {
-    return _.chain(flightsRaw).first().get("flights", []).value();
+    return {
+      flights: _.first(flights),
+      sources,
+    };
   }
-  return [];
+  return {
+    flights: [],
+    sources,
+  };
 };
 
 module.exports = { requestFlights, consolidateFlights, comparator };
