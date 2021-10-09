@@ -5,10 +5,10 @@ The custom header _X-flight_sources_ adds metadata on which sources have respond
 
 **`GET /flights`**
 
-| status |                       | payload  | custom header    |     |     |     |     |     |     |     |     |
-| ------ | --------------------- | -------- | ---------------- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 200    | OK                    | Flight[] | X-flight_sources |     |     |     |     |     |     |     |     |
-| 500    | Internal Server Error |          |                  |     |     |     |     |     |
+| status |                       | payload  | custom header    |
+| ------ | --------------------- | -------- | ---------------- |
+| 200    | OK                    | Flight[] | X-flight_sources |
+| 500    | Internal Server Error |          |                  |
 
 ## Prepare
 
