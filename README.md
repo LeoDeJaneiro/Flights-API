@@ -1,7 +1,9 @@
-# Flights API
+# Flights API - Express.js
 
-This RESTful API responds within less than 1 sec with a list of unique flights which have been fetched from two endpoints.
-The custom header _X-flight_sources_ adds metadata on which sources have responded.
+This RESTful API has been developed as coding challenge. 
+The requirement was to respond with a list of unique flights (which have been requested from two unreliable endpoints) within 1 sec and to omit responses which haven't been sent in time, and errors.
+
+After 800 ms the requests are canceled and the metadata (sources from which data has been included in the response) are added to a custom http header _X-flight_sources_.
 
 **`GET /flights`**
 
