@@ -3,7 +3,7 @@
 This RESTful API has been developed as coding challenge. 
 The requirement was to respond with a list of unique flights (which have been requested from two unreliable endpoints) within 1 sec and to omit responses which haven't been sent in time, and errors.
 
-After 800 ms the requests are canceled and the metadata (sources from which data has been included in the response) are added to a custom http header _X-flight_sources_.
+After 800 ms, pending requests are canceled and the source-metadata (sources from which data has been included in the response) is added to a custom http header _X-flight_sources_.
 
 **`GET /flights`**
 
